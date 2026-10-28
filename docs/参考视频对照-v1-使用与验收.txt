@@ -1,0 +1,56 @@
+CPR Review · 参考视频对照 v1
+更新日期：2026-10-23
+
+一、用户能做什么
+打开已有练习，查看问题后点击 Compare references；也可询问“给我刚才那个问题的参考片段”。助手承接当前视频、来源报告和类别，打开并排播放器。
+• Reference clip：切换数据集标为 Correct 的正常参考和相关错误示例。
+• Play both from start：两段视频从各自起点播放，不进行动作时间对齐。
+• Source and use information：查看类别标签、原始记录、视角和公开来源。
+• 关闭、重新打开或刷新页面后仍可查看；新视频不会继承旧视频的参考结果。
+已有分析结果独立保留。参考检索不是一次新分析，也不会把示例标签写成用户的识别结果。
+
+二、启动
+在 E:\998\CPR+AGENT\CODE 下运行：
+  .\scripts\start_product_demo.ps1
+打开 http://127.0.0.1:8007 。结构化按钮不需要大模型。
+需要自然语言承接时运行：
+  .\scripts\start_product_demo.ps1 -EnableDeepSeek
+Key沿用后端.env，启动和回看不会自动调用供应商。其他启动入口未配置参考目录时仍按原行为运行。
+
+三、数据与边界
+来源：https://huggingface.co/datasets/ShunliWang/CPR-Coach
+项目：https://github.com/Shunli-Wang/CPR-Coach
+固定版本：b8667b8fd6a70ac63cc09fc6b763a9459b7c160a。
+目录：data/reference-v1/catalog.json；引用现有本地公开样本，不新增视频下载、采集、标注或训练。
+目录含24段单视角片段：原始标签0及系统支持的11类错误，每类两个录制；标签与帧数核对原始ann/trainlist.txt，媒体和来源清单均有SHA-256校验。
+检索返回正常参考及当前请求类别的错误示例。排除与用户练习SHA相同的视频，避免拿原片自我对照；某类没有有效素材则明确缺失，不用其他类别冒充。
+Correct是数据集标签，不代表本系统认证的标准示范。系统不生成错误发生时刻、真实按压深度或临床合格结论。
+仓库的MIT许可是软件许可；固定数据集卡未声明独立数据许可。目录仅引用已有本地研究数据，本次不打包视频作公开再分发，也不据此推断再分发授权。
+
+四、Agent与工程实现
+沿用12节点，不增节点，不改M1及M2–M5预留算法。
+主路：N01绑定上下文 → N02解析show_example目标 → 必要时N03确认 → N04执行只读reference.search → N10汇总 → N11输出参考说明 → N12保存。
+结构化按钮跳过N02模型解析；自然语言只需一次N02调用。N11使用受限事实模板，不让大模型编造教学内容或播放地址。参考请求不经过视觉分析链。
+不使用向量RAG：当前目录是有限的已标注片段，按已确认类别精确检索即可。
+持久化：沿用data/product-demo-v2/runtime中的SQLite。每次检索保存reference_lookup对象，绑定run/session/clip、上下文快照、来源报告、目录哈希及选中媒体哈希；事件reference.lookup记录范围与结果。
+保留原请求幂等；同一轮恢复复用已保存检索，不另选素材。查询和播放均重新验证来源，目录、媒体、来源报告或上下文失效即不可用；重查产生新请求，不静默改写旧记录。
+媒体接口只接受本次回执中的片段ID，路径限于固定本地数据目录，支持HTTP Range；不接受客户端任意路径。
+接口：GET /api/runs/{run_id}/references；GET /api/runs/{run_id}/reference-clips/{reference_id}/media。
+能力清单新增reference_tools=[reference.search]；原四个CV工具、模块调度策略和视觉结果契约保持不变。
+
+五、验证与验收
+1. 全量pytest：214项通过，其中新增参考功能19项；覆盖标签与来源、同片排除、范围绑定、取消、损坏回执、缺失媒体、目录变更、幂等及越界访问。测试使用隔离的合成夹具，不作为模型识别效果证据。
+2. 真实浏览器：无接口或CV模拟，实际播放练习与参考视频；验证切换、关闭/重开、刷新、新视频隔离及1440/1024/768/390宽度无横向溢出。
+3. 真实DeepSeek：文字请求承接弯臂类别，目标解析LLM_GOAL_PARSED；1次模型调用、0次新视觉调用，返回正常参考和另一录制的弯臂示例，原预测不变。
+4. 服务重启：新浏览器从服务端历史恢复参考请求并播放，无新模型或视觉调用。详见live/restore.json。
+5. 前端格式、类型检查和生产构建通过；Ruff通过；原模型145项与模块23项固定依赖未变，.env及已有冻结发布包保持不变。
+
+可复核材料：
+  test-results/reference-v1/tests-final.xml
+  test-results/reference-v1/ui/acceptance.json
+  test-results/reference-v1/live/acceptance.json
+  test-results/reference-v1/live/restore.json
+  data/reference-v1/acceptance.json
+修改前备份：data/reference-v1/before/及before.json。
+复核脚本：scripts/reference_ui_smoke.cjs；scripts/reference_live_smoke.cjs --allow-live；后者--restore只回看已有请求，不再次调用供应商。
+验收文件存在时脚本拒绝覆盖；重试真实调用复用run-state.json，不盲目重复付费请求。

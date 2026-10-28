@@ -1,0 +1,38 @@
+[
+  {
+    "path": "cpr_alpha_vendor/bbox.py",
+    "sha256": "190436445493f8ff08db86f64dca9c8fbc2198a11827a8a60d5d1e947c08bdf3"
+  },
+  {
+    "path": "cpr_alpha_vendor/fastpose.py",
+    "sha256": "67666f330b742ab7de4e2d0008b8702134f1271d51d9d4e829bccfb40450a4f4"
+  },
+  {
+    "path": "cpr_alpha_vendor/transforms.py",
+    "sha256": "d60227eae29d06a01eb72625da95ebdb476c61552e9df501825e6e7ae7b79280"
+  },
+  {
+    "path": "cpr_alpha_vendor/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "cpr_alpha_vendor/layers/dcn.py",
+    "sha256": "44c40eddad67a152529e3ffb2d60fb0190792b45753312b47995f47cf147f66f"
+  },
+  {
+    "path": "cpr_alpha_vendor/layers/DUC.py",
+    "sha256": "64721bad314b6b1e7cce4faadbb21bfd67770d41d79955d15cc02bf4584a8a2a"
+  },
+  {
+    "path": "cpr_alpha_vendor/layers/SE_module.py",
+    "sha256": "c99ad848a0ffa4a625a6fb5ae6ed3e662dd5231c6c082d40a5ee0a25c90d88be"
+  },
+  {
+    "path": "cpr_alpha_vendor/layers/SE_Resnet.py",
+    "sha256": "d239a3ca0d925a40a7a82a6fe1b7533325e2598320087667b83f57c3df542a18"
+  },
+  {
+    "path": "cpr_alpha_vendor/layers/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

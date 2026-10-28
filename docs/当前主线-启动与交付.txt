@@ -1,0 +1,37 @@
+当前主线交付说明（mainline-delivery-v1）
+
+启动：
+1. cd E:\998\CPR+AGENT\CODE
+2. .\scripts\start.ps1
+3. 浏览器打开 http://127.0.0.1:8013/demo
+4. 按页面进入 D01、D02、D03 案例。
+
+DeepSeek：默认关闭。只有需要真实文字追问时才运行 .\scripts\start.ps1 -EnableDeepSeek；密钥仅从项目根目录 .env 私下读取，不进入命令行、视觉子进程或交付文件。演示结束后重新运行 .\scripts\start.ps1 切回默认关闭模式。
+
+案例：
+D01 完整复盘：四阶段视觉分析，随后解释、摘要、参考视频均复用已保存结果。
+D02 重点复核：先执行 pose → skeleton → fusion，随后扩大到全部类别时补充 RGB 与 fusion。
+D03 下一次练习：只保存上一次的下一关注点，当前视频仍没有预测结果。
+
+验证记录：
+- data/mainline-delivery-v1/demo-state.json：案例状态、报告与边界验证。
+- data/mainline-delivery-v1/deepseek-live.json：9 次有界真实文字请求，0 次新增视觉调用。
+- data/mainline-delivery-v1/navigation-tests.xml：演示导航与版本/资源边界测试。
+- data/mainline-delivery-v1/navigation-tests-final.xml：当前演示导航测试 5/5 通过。
+- data/mainline-delivery-v1/regression-tests.xml：当前上下文、连续复盘、参考、LLM 契约等 155/155 通过。
+- data/mainline-delivery-v1/core-tests.xml：离线回归结果；其中历史测试有 7 项与当前分支配置/旧 profile 假设不一致，不能作为本版本通过证据，当前新增导航测试 5/5 通过。
+
+数据与限制：仅使用已有公开 CPR-Coach 视频和冻结模型；系统输出是训练复盘辅助信息，不是专业认证、医疗诊断或急救指导。
+- data/mainline-delivery-v1/mainline-ui-acceptance.json：离线用户流程通过；播放、解释、摘要、导出、刷新恢复、390px移动宽度通过，D02重点复核与扩大检查链路已验证，0次新增视觉调用。
+- data/mainline-delivery-v1/mainline-deepseek-ui-acceptance.json：DeepSeek界面追问通过；限定到手臂弯曲范围，2次语言模型调用，0次新增视觉调用，预测结果保持一致。
+- 最终运行状态：8013端口已恢复默认disabled，provider_calls=0；.env与冻结算法配置哈希未改变。
+- docs/模块交接与版本冻结-v1.html：五个模块的负责人、输入/输出契约、改进算法、验证命令、指标和边界。
+- docs/当前主线-验收指标.html：一页展示 M1-M5、Agent、工程与数据门槛的验收数字。
+- data/mainline-delivery-v1/module-contracts.json + scripts/verify_module_handoff.py：结构化交接契约和冻结文件校验。
+- 第6项体验优化已落在当前主线演示页：补充默认 Guided review / DeepSeek 状态、分析阶段解释、错误恢复、导出和刷新恢复提示；主线前端与视觉 pipeline 继续保持冻结。
+- data/mainline-delivery-v1/demo-guide-mobile.png：演示页 390px 移动宽度验收，无浏览器错误和外部请求。
+- scripts/final_acceptance.py：最终只读验收入口；检查运行态、D01/D02/D03、异常视频边界、离线/DeepSeek UI 记录和冻结契约，不启动新的视觉或大模型调用。
+- data/mainline-delivery-v1/final-acceptance.json：最终验收结果；当前通过，0 次新增视觉调用，0 次新增大模型调用。
+- 演示页已补充推荐演示顺序和 Agent 决策可见性说明，现场按 D01 → 追问 → D02 → D03 执行即可。
+- P0 用户体验验收已固化：上传后显示时长/帧数/分辨率，失败页提供提高预算、重新分析、换视频和查看历史入口，结果明确标注全视频范围。
+- scripts/verify_p0_acceptance.py + data/mainline-delivery-v1/p0-acceptance.json：P0 静态契约验收，0 次新增视觉调用，0 次新增大模型调用。

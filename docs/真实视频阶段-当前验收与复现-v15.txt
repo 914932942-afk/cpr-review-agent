@@ -1,0 +1,5 @@
+离线真实视频阶段通过原门槛。Macro-F1=0.866667；完整匹配20/26；各类召回100%；Correct误报0/2。
+完整模型字段含后备识别器69755/70000；31项测试通过；3次原始视频冷启动复现。
+不新增人工数据或标签，不重训视觉主干。不是独立盲测，未验收组合RGB，未批准Web/Agent发布。
+运行：C:\Users\gjj33\.conda\envs\ml\python.exe experiments/public_cpr_fullpose/infer_candidate_v2.py --video <单视角视频> --output <新输出JSON路径>
+当前清单：data/public_cpr/rgb-evaluation-v15/bundle-manifest-v3.json

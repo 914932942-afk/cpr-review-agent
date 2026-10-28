@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CPR Review · 演示与验收手册</title>
+<style>
+:root{font-family:"Segoe UI","Microsoft YaHei",sans-serif;color:#173f48;background:#f2f6f5;line-height:1.75;font-size:14px}*{box-sizing:border-box}body{margin:0}main{max-width:1100px;margin:36px auto;padding:0 24px 50px}h1{font-size:34px;line-height:1.3;letter-spacing:-1px;margin:8px 0 16px}h2{font-size:21px;margin:0 0 14px}h3{font-size:15px;margin:0 0 8px}p{margin:8px 0 14px}a{color:#08796b}header{padding:28px 0 14px}.eyebrow{font-size:11px;letter-spacing:2px;color:#2a8578;font-weight:700}.lead{max-width:850px;color:#5e7880;font-size:15px}.tags{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}.tags span{background:#e1eee9;color:#236b5c;border-radius:6px;padding:5px 10px;font-size:12px}.card{background:white;border:1px solid #dbe7e3;border-radius:14px;padding:24px;margin:18px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid .card{margin:0}.notice{border-left:4px solid #c18c35;background:#fff5e2;padding:14px 18px;border-radius:6px;color:#78572d}code{font-family:Consolas,monospace;font-size:12px;background:#eef4f2;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#163c43;color:#e2f2ed;padding:18px;border-radius:9px;line-height:1.8;font-size:12px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:12px 10px;vertical-align:top;text-align:left;border-bottom:1px solid #e0eae6}th{background:#edf5f1;color:#45695e}.scroll{overflow:auto}ol{padding-left:24px}li{margin:8px 0}.small{font-size:12px;color:#647d83}.route{display:flex;gap:10px;flex-wrap:wrap;font-size:13px}.route b{background:#e9f3ee;padding:9px 14px;border-radius:8px}.button{display:inline-block;background:#147a6b;color:white;padding:10px 15px;border-radius:8px;text-decoration:none;margin:6px 8px 4px 0}details{border-top:1px solid #e0eae6;padding-top:13px;margin-top:16px}summary{cursor:pointer;font-weight:600;color:#267869}footer{color:#758b8d;font-size:12px;margin-top:28px}@media(max-width:650px){main{margin-top:12px;padding:0 16px 30px}.grid{grid-template-columns:1fr}.card{padding:18px}h1{font-size:28px}th,td{min-width:130px;padding:10px}header{padding-top:16px}}@media print{body{background:white}.card{break-inside:avoid}main{margin:0;max-width:none;padding:0}.button{color:#173f48;background:transparent;border:1px solid #ddd}details{display:block}pre{color:#173f48;background:#f1f5f3}}
+</style></head><body><main>
+<header><div class="eyebrow">CPR REVIEW / DEMO ACCEPTANCE · 2026.10.22</div>
+<h1>一次真实分析，持续有据复盘。</h1><p class="lead">第四步：将当前主线整理为可重复演示、可解释失败、可恢复的工程版本。使用已有公开样片，验证真实功能；不把演示包装成识别精度或临床效果证明。</p>
+<div class="tags"><span>12节点 LangGraph</span><span>真实四阶段视觉链路</span><span>证据与报告可追溯</span><span>DeepSeek关闭</span><span>M2–M5保留基线</span></div>
+<a class="button" href="http://127.0.0.1:8005">打开独立演示环境 ↗</a><a href="../data/demo-acceptance-v1/acceptance.json">最终验收记录</a></header>
+<div class="notice">用途：帮助CPR练习者回看训练片段、理解模型提示、整理下一次复盘记录。所有结论均为单视角、整段视频的实验性模型输出。未标记不代表动作正确；不提供急救决策、错误时间点、按压深度或测量BPM。</div>
+
+<p class="small">界面已更新为用户复盘工作台：左侧历史，中间视频与发现，右侧助手。执行节点与日志统一在 Technical details 内；新版界面验收见 <a href="../test-results/product-ui-v1/ui-final/acceptance.json">用户界面回归记录</a>。</p>
+<section class="card"><h2>01 · 演示前只检查这四件事</h2><ol>
+<li>在 <code>E:\998\CPR+AGENT\CODE</code> 打开终端，执行 <code>.\scripts\start_demo.ps1</code>。首次启动先核验模型、代码版本和前端构建，不下载数据、不调用大模型。</li>
+<li>浏览器访问 <code>http://127.0.0.1:8005</code>，确认后端已连接、在 Technical details 中确认 Language model 为 <strong>Disabled</strong>。该环境使用独立演示数据库，原8004工作区保留。</li>
+<li>在左侧 Your practices 中选择 <strong>demo-training.mp4</strong>。若最后一轮曾被取消，在历史中重新打开 <strong>Saved recap</strong>。再确认来源证据可用。</li>
+<li>完整推理和其他GPU任务顺序执行，共享同一GPU锁。模型环境与权重必须保留在本机；仅有网页文件不能运行系统。</li></ol>
+<p class="small">可提前执行 <code>.\.venv\Scripts\python.exe scripts/demo_preflight.py --check-ml</code> 核查CUDA和依赖。启动脚本默认强制关闭DeepSeek；本轮不需要输入或展示API Key。</p></section>
+
+<section class="card"><h2>02 · 推荐现场路径：约3–5分钟</h2>
+<div class="route"><b>恢复已分析视频</b><b>→ 看模型提示</b><b>→ 追问一个类别</b><b>→ 保存范围摘要</b><b>→ 刷新恢复</b></div>
+<div class="scroll"><table><thead><tr><th>顺序</th><th>操作</th><th>应看到的结果</th><th>展示的意义</th></tr></thead><tbody>
+<tr><td>1 · 恢复</td><td>选择 demo-training.mp4，打开保存摘要，播放原视频。</td><td>视频、当前报告、类别范围与来源一起恢复。</td><td>会话记忆有明确对象，不依赖浏览器临时对话。</td></tr>
+<tr><td>2 · 理解</td><td>查看右侧助手中的 Bent arms 说明；原始读数位于左侧 How this was assessed。</td><td>类别含义、保存的判定、分支读数及限制分开说明。</td><td>解释来自核验过的记录，不凭空编写原因。</td></tr>
+<tr><td>3 · 追问</td><td>点击类别卡片的 Explain；需要时展开 Focus 调整类别，再点击 Show selected focus。</td><td>新报告的范围正确，标为复用结果，工具执行数为0。</td><td>围绕同一份证据持续复盘，不重复计算。</td></tr>
+<tr><td>4 · 摘要</td><td>点击 Make a recap，再通过 Export review 打开可打印报告。</td><td>只总结当前显示类别，列出范围之外的类别数量。</td><td>得到下次可继续使用的复盘记录。</td></tr>
+<tr><td>5 · 恢复</td><td>改变范围后点击右侧 Latest recap，或在 Review history 中打开 Saved recap；刷新，或换浏览器从历史打开。</td><td>恢复摘要及其原始类别范围，已有预测保持不变。</td><td>上下文、历史和明确偏好各有边界，不串视频或报告。</td></tr>
+</tbody></table></div><p class="small">DeepSeek关闭时，文字请求进入确认表单；解释由证据模板生成。当前演示不冒充已联调的自由对话。Save focus / Use saved focus / Forget focus用于明确保存、应用和删除关注点，摘要不会自动写入偏好。</p></section>
+
+<div class="grid"><section class="card"><h2>03 · 完整推理路径</h2><p>上传已有公开样片到新会话，再点击 Start review。等待四个真实阶段完成后查看报告。</p>
+<pre>pose.extract
+  → skeleton.predict
+  → rgb.predict
+  → fusion.predict
+  → 来源核验 → 解释与保存</pre>
+<p>本次实测约132秒完成四个工具阶段。实际耗时受GPU、冷启动和排队影响，应预留时间。现场也可使用已完成结果，但必须明确说明正在复用。</p>
+<p class="small">样片：SupC04/r00/ch0。路径：<code>data/public_cpr/rgb-acceptance-v1/records/SupC04--r00--ch0/video.mp4</code>。该样片为已知工程回归；“正常复盘”指系统正常完成，样片本身含错误类别。</p></section>
+<section class="card"><h2>04 · 失败也必须可解释</h2><ul>
+<li><strong>未选择视频：</strong>界面禁用复盘；服务端不生成预测。</li>
+<li><strong>文件不是视频：</strong>上传失败，显示错误，不能沿用上一份视频结果。</li>
+<li><strong>能存储但不能解码：</strong>真实解码校验失败，无分类提示、无解释。</li>
+<li><strong>取消任务：</strong>停止请求，不发布结果；已验证真实ML子进程随取消结束。</li>
+<li><strong>确认时重启：</strong>保持原视频、报告和范围快照，再确认后继续。</li>
+<li><strong>来源损坏：</strong>无法核验的解释隐藏；历史记录不冒充当前有效结论。</li></ul>
+<p class="small">已验证的失败会话可在历史中查看。临场故障后，先回到成功的保存摘要；不要把上一次结果说成新输入的分析。</p></section></div>
+
+<section class="card"><h2>05 · 可重复执行的验收</h2><p>完整脚本会创建专用测试会话，真实运行一次完整推理，再覆盖输入失败、实际取消和恢复。每次使用新的输出目录，禁止覆盖旧验收。</p>
+<pre>.\.venv\Scripts\python.exe scripts/demo_scenarios.py --phase prepare --output-dir test-results/demo-repeat-01
+# 等脚本提示后，在服务终端Ctrl+C，重新运行 .\scripts\start_demo.ps1
+.\.venv\Scripts\python.exe scripts/demo_scenarios.py --phase resume --output-dir test-results/demo-repeat-01</pre>
+<p>resume会核对服务进程已更换；确认快照、预测和摘要来源必须保持一致，重复提交也不能重复执行。</p>
+<p><a href="../test-results/demo-acceptance-v1/http/acceptance.json">HTTP验收</a> · <a href="../test-results/demo-acceptance-v1/ui/acceptance.json">桌面/手机验收</a> · <a href="../test-results/demo-acceptance-v1/tests-final.xml">自动化测试</a></p>
+<details><summary>验收标准和不应声称的能力</summary><ul><li>成功：四工具真实执行、证据有效，已知样片输出与冻结基线一致；追问和摘要不新增视觉调用。</li><li>失败：输入被拒绝或失败时没有预测；取消无报告，ML进程已退出；重启后等待和保存摘要均能恢复。</li><li>界面：桌面与390px宽度无横向溢出，实际视频可播放，错误与成功记录可以切换。</li><li>边界：不声称新的识别精度提升、临床有效性、多视角融合、独立复核、自动定位或已启用的在线LLM。</li><li>模块：M1沿用已接受实现；M2–M5仍为基线与插槽，工程验收不算作组员算法创新。</li></ul></details></section>
+
+<section class="card"><h2>06 · 冻结与恢复</h2><p>当前演示归档：<code>releases/stable-mainline-20261022-v1/</code>。包含应用源码、前端构建、演示素材、两份SQLite一致性备份、版本哈希和恢复核验；不包含真实.env、Key、虚拟环境或重复的大模型权重。</p>
+<p><a href="../releases/stable-mainline-20261022-v1/RESTORE.txt">查看恢复步骤</a> · <a href="../releases/stable-mainline-20261022-v1/release.json">归档与解压核验</a></p>
+<p class="small">恢复须先停止相关服务并备份当前文件，再覆盖回原CODE根目录，保留原模型和环境。解压副本已验证可回放保存结果；它不是可搬到任意电脑独立推理的完整模型发行包。</p></section>
+<footer>当前系统主线第四步 · 真实工程验收 · 不新增数据采集、人工标注或训练 · 原有主线与历史归档保留</footer>
+</main></body></html>

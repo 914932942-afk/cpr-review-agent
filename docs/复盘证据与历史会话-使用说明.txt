@@ -1,0 +1,27 @@
+本次完成：复盘证据展示与服务端历史恢复
+
+使用顺序
+1. 启动 scripts\start.ps1，打开 http://127.0.0.1:8000。
+2. 在 Resume a review / Saved session 中选择已有会话，恢复视频和最近一次请求。
+3. 在 Review history 中点击 Open record，查看该次请求的结果、工具记录与trace。
+4. 在结果中展开 View recorded evidence：查看保存的分类、分支分数、阈值及证据范围。
+5. 展开 Verified source：查看采样记录、原分析ID和哈希；Open source video 可回放原视频。
+6. Explain selected findings 读取所选类别；Summarise record 汇总当前片段已有结果。两者均复用分析。
+7. Clear workspace view 只清理当前浏览器选择；重新选择 Saved session 即可找回记录。
+
+数据与边界
+业务历史仍保存在 data/business.sqlite3；无需新增数据库或迁移旧表。
+历史按会话隔离，包含完成、失败、取消和等待中的请求；每页20条，可继续加载。
+只展示保存的模型证据。分支分数不是错误概率，阈值比较不能完整重建最终融合判定。
+结果仅覆盖整段视频，不输出错误发生时刻、动作原因、按压深度或测量BPM。
+打开证据时校验视频、模型与原始结果文件；源文件不可用时保留历史摘要并明确提示。
+旧报告不被改写；旧bundle会话可回看，新分析需要使用当前版本会话。
+DeepSeek继续保持 CPR_LLM_MODE=disabled，本次未调用真实接口。
+
+本次验收位置
+test-results/review-integration-v1/tests.xml：后端测试。
+test-results/review-integration-v1/http-acceptance.json：真实服务读取既有真实视频结果并复盘。
+test-results/review-integration-v1/ui-acceptance.json：1440与390宽度的历史恢复、解释和摘要操作。
+data/review-integration-v1/acceptance.json：本次改动与验收汇总。
+
+这一步验证软件集成、数据绑定与交互，不新增模型精度结论。

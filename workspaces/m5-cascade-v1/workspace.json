@@ -1,0 +1,18 @@
+{
+  "workspace": "E:\\998\\CPR+AGENT\\CODE\\workspaces\\m5-cascade-v1",
+  "parent_workspace": "E:\\998\\CPR+AGENT\\CODE\\workspaces\\m4-refined-v2",
+  "parent_profile_sha256": "2b60cadfb172a8221ecd1350fd02d0e9f6a09a2d6ae010183da12640e0645a28",
+  "entrypoint": "scripts/start_m5.ps1",
+  "url": "http://127.0.0.1:8013",
+  "graph_version": "cpr-review-12-v0.9-cascade",
+  "candidate_not_accepted": false,
+  "profile_sha256": "4b98f9a009847580c82b50d5862b375b1a18917b190f5955957c1cb8b51ce4c8",
+  "module_slots": {
+    "M2": "competence-scope-disagreement-v3",
+    "M3": "source-quality-selective-v1",
+    "M4": "consent-coverage-dag-v2",
+    "M5": "quality-dependency-cascade-v1"
+  },
+  "runtime_data": "E:\\998\\CPR+AGENT\\CODE\\workspaces\\m5-cascade-v1\\data\\m5-cascade-v1\\runtime",
+  "accepted": true
+}

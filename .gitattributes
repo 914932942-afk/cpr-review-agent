@@ -1,0 +1,2 @@
+* -text
+# Preserve source/manifest bytes: the application verifies SHA256 hashes.

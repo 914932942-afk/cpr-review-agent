@@ -1,0 +1,64 @@
+复盘体验 v1 · 上传检查 / 练习对照 / 个人清单
+
+使用入口
+在 CODE 下运行 .\scripts\start_product_demo.ps1，打开 http://127.0.0.1:8007。
+需要新发自然语言请求时使用 -EnableDeepSeek；下面三项操作均不需要调用大模型或重新运行识别模型。
+M2–M5仍保留原基线插槽，M1、视觉权重、阈值、12节点和.env未改动。
+
+1. 上传检查
+Choose video 后先上传和完整解码，再创建练习。产品启动脚本启用 CPR_UPLOAD_PREFLIGHT=true。
+范围：文件不超过50 MiB；8–900帧且不超过45秒；帧率>0且≤240；各边至少128，最长边≤3840，面积≤3840×2160；尺寸恒定、可完整解码。
+规则直接复用原视觉管线的probe函数，不另外维护一套输入门槛；CPU子进程不加载模型，单次限35秒，同时最多检查一个文件。
+通过后显示帧数、时长、分辨率。过短、过长、尺寸不支持、解码不完整等情况分别提示；检查繁忙或超时可重新上传。
+失败不会创建新asset/clip/session/run，清理本次临时文件，并保持原工作区。已有旧记录仍可回看。
+这只证明文件兼容，不保证内容为CPR、机位适用或识别可靠。后续分析仍独立校验。
+兼容入口默认不打开上传预检；原测试夹具和旧启动脚本不受影响。8007产品入口默认打开。
+
+2. 两份报告对照
+打开有分析结果的练习，在What to look at下点击Compare practice records，选择另一次练习的报告。
+左侧显示其他记录，右侧显示当前记录；两段视频各自回放，没有动作时间对齐。
+只列出两份报告都实际展示过的类别。某一报告独有的类别注明排除数量，未检查不等于未发现。
+结果仅显示Flagged for review / Not flagged，保留各自原始来源；不计算得分差、不推断进步。
+同一练习不比较；不同模型版本或无共同范围时说明原因；来源缺失/变更时不提供对照结论。
+不同练习若上传的是同一文件，会注明“同一段录像的不同记录”。选择或关闭弹窗不切换当前练习、不改写结果、不发起分析。
+
+3. 个人复盘清单
+Notes for next time可写最多2000字的个人笔记，并为11个支持类别分别添加一个清单项。
+Confirm later：还想确认；Reviewed：已经回看；Next practice：下次想关注。
+点击Save notes后保存在本机SQLite的review_notebook对象中；未保存草稿按session分开保存在当前浏览器localStorage。
+切换练习、刷新可恢复自己的草稿；已保存记录可在服务重启或另一浏览器中恢复。
+保存采用版本号和幂等键。另一窗口已保存新版本时，拒绝覆盖并保留本地草稿；复制需要的文字后用Reload saved notes重新载入。
+Reviewed不是“纠正成功”，三个状态都不是训练标签或视觉事实。自由笔记不传给LLM，也不进入训练、报告分类或全局偏好。
+
+下次目标如何进入Agent上下文
+先保存Next practice项目；再新增另一个视频，在BETWEEN PRACTICES的Saved next-practice goals中选中来源，点击Use these goals。
+只沿用用户已确认的类别ID；不会自动沿用，不携带旧预测、自由笔记或原视频作为新视频证据。
+新练习仍没有预测，直到独立分析完成。当前有效报告范围优先于起始目标；开始分析后起始目标固定。
+开始分析前可Start fresh清除。来源清单版本被修改后，既有沿用记录会失效，需要在新练习中重新确认；不静默替换目标。
+仅接受同模型bundle的更早练习。新旧视频可以是同一文件，但它们仍是两个独立记录。
+来源清单不要求有识别结果：它表达用户的关注目标，不表达动作是否有错。
+
+验收与证据
+自动化：263项通过，包括原232项回归及31项新增输入、对照和笔记测试；无真实网络请求。
+新增测试：tests/test_upload_validation.py、test_review_comparison.py、test_review_notebook.py。
+真实CPU进程：公开正常片段362帧、14.48秒、3840×2160通过；三帧控制片段在建立练习前被拒绝。
+真实浏览器：11类报告交集、弯臂/倾斜原结果、两段真实视频播放、桌面/手机布局、短视频拒绝并保持工作区、草稿恢复、版本冲突、保存、清空/沿用目标全部通过。
+服务重启后：新浏览器恢复已保存清单及下一次练习的起始目标，通过。
+七个旧演示案例只读检查通过；本轮未新增CV分析或DeepSeek请求（运行/工具/事件/外呼计数不变）。
+证据：test-results/review-experience-v1/，before代码备份与数据库备份在data/review-experience-v1/。
+浏览器复测入口：node scripts/review_experience_ui_smoke.cjs。
+浏览器验收脚本会保护已通过的输出，避免重复覆盖；它使用公开已有视频，未采集或标注任何新CPR数据。
+
+主要接口
+POST /api/assets（8007启用预检后）
+GET /api/reports/{id}/comparison-options
+GET /api/review-comparison?left_report_id=...&right_report_id=...
+GET /api/sessions/{id}/notebook
+POST /api/sessions/{id}/notebook，Idempotency-Key + revision
+POST /api/sessions/{id}/continuity，显式选择报告范围或清单目标（二者不能同时选择）
+
+数据位置
+正式8007：data/product-demo-v2/runtime/business.sqlite3，objects.kind=review_notebook / practice_focus。
+检查临时文件：runtime/media/*.part；拒绝或完成后清理，不会生成识别特征或GPU任务。
+未保存草稿：浏览器localStorage，cpr.notebookDraft.<session_id>；不保证跨设备。
+本地单用户演示边界保持不变。上传预检与报告对照不是医学评估，也不扩大原模型适用范围。

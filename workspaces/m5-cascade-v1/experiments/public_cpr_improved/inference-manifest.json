@@ -1,0 +1,147 @@
+{
+  "schema": "cpr-offline-pipeline-v1",
+  "frozen_at": "2026-10-21T02:14:18.195784+00:00",
+  "head": "data/public_cpr/improvement-v2/combined-64.pt",
+  "protocol": "data/public_cpr/improvement-v2/protocol.json",
+  "encoder": "data/public_cpr/weights/k400_posec3d-041f49c6.pth",
+  "detector": "data/public_cpr/weights/yolov8x-pose.pt",
+  "input_profile": {
+    "detector": "YOLOv8x-Pose, imgsz640, float32",
+    "recognition_pose": "frozen AlphaPose Halpe68, first17 body points",
+    "alpha_compatibility": "upstream model/tensors, torchvision non-modulated DCN; strict tensor loading + zero-offset numerical check",
+    "actor_selection": "IoU association + dominant median head/torso motion using YOLO points; coverage>=0.8, activity margin>=1.2, association gap<=5",
+    "coordinates": "preserve raw model xy, clip score[0,1]; downstream visible threshold0.2",
+    "geometry": "271D body descriptor, <=5-frame internal-gap interpolation only",
+    "frozen_features": "512D frozen PoseC3D +271D geometry",
+    "frame_scope": "8..3000 ordered decoded frames; constant dimensions; positive nominal FPS; advertised count must match if available",
+    "output_scope": "clip-level supported-error scores; no exact error onsets, physical depth or measured BPM"
+  },
+  "pinned_files": [
+    {
+      "path": "experiments/public_cpr_improved/infer_video.py",
+      "sha256": "7e00ff2132977846659f5d81313435be72172135d74ab91399a1d2fddf5c4f3c"
+    },
+    {
+      "path": "experiments/public_cpr_improved/raw_pose_adapter.py",
+      "sha256": "37d42b985955cff2bf9c8c305cec909ccfe42c34b0aba400e93117e60c168a74"
+    },
+    {
+      "path": "experiments/public_cpr_improved/alpha_refiner.py",
+      "sha256": "d6b11d030a4a312a7d4f3cb4d343785ff3b43ac9e09e4925b5f9e7b5b5a6859d"
+    },
+    {
+      "path": "experiments/public_cpr_improved/geometry.py",
+      "sha256": "3ab2c7f581eb3b2556e80bf5f6935f884799ac91fa1ec972151d735f8037e1a1"
+    },
+    {
+      "path": "experiments/public_cpr_improved/quality_head.py",
+      "sha256": "71b5da5f3eb1cb95eac3756882cb91b256f860fc2a8db622e13f261c8b92945e"
+    },
+    {
+      "path": "experiments/public_cpr_improved/improve.py",
+      "sha256": "6d51efda9ba2992bf6210212df2662056af88cd77aa60244d2d3ac9c8e947567"
+    },
+    {
+      "path": "experiments/public_cpr_improved/paths.py",
+      "sha256": "6ba084c6fe74f2e159f4a976abe0eba0f540fc8e5788848ca0fac48582f4d955"
+    },
+    {
+      "path": "experiments/public_cpr_improved/alpha-pose-source/cpr_alpha_vendor/bbox.py",
+      "sha256": "190436445493f8ff08db86f64dca9c8fbc2198a11827a8a60d5d1e947c08bdf3"
+    },
+    {
+      "path": "experiments/public_cpr_improved/alpha-pose-source/cpr_alpha_vendor/fastpose.py",
+      "sha256": "67666f330b742ab7de4e2d0008b8702134f1271d51d9d4e829bccfb40450a4f4"
+    },
+    {
+      "path": "experiments/public_cpr_improved/alpha-pose-source/cpr_alpha_vendor/transforms.py",
+      "sha256": "d60227eae29d06a01eb72625da95ebdb476c61552e9df501825e6e7ae7b79280"
+    },
+    {
+      "path": "experiments/public_cpr_improved/alpha-pose-source/cpr_alpha_vendor/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "experiments/public_cpr_improved/alpha-pose-source/cpr_alpha_vendor/layers/dcn.py",
+      "sha256": "44c40eddad67a152529e3ffb2d60fb0190792b45753312b47995f47cf147f66f"
+    },
+    {
+      "path": "experiments/public_cpr_improved/alpha-pose-source/cpr_alpha_vendor/layers/DUC.py",
+      "sha256": "64721bad314b6b1e7cce4faadbb21bfd67770d41d79955d15cc02bf4584a8a2a"
+    },
+    {
+      "path": "experiments/public_cpr_improved/alpha-pose-source/cpr_alpha_vendor/layers/SE_module.py",
+      "sha256": "c99ad848a0ffa4a625a6fb5ae6ed3e662dd5231c6c082d40a5ee0a25c90d88be"
+    },
+    {
+      "path": "experiments/public_cpr_improved/alpha-pose-source/cpr_alpha_vendor/layers/SE_Resnet.py",
+      "sha256": "d239a3ca0d925a40a7a82a6fe1b7533325e2598320087667b83f57c3df542a18"
+    },
+    {
+      "path": "experiments/public_cpr_improved/alpha-pose-source/cpr_alpha_vendor/layers/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "experiments/public_cpr_improved/alpha-pose-source/vendor-manifest.json",
+      "sha256": "c0e42f19145a52f4452229dcd1f814f73049a57294a6fe680baf76ef8b473dce"
+    },
+    {
+      "path": "experiments/public_cpr_improved/alpha-pose-source/source.json",
+      "sha256": "22cfc15a89bbbbe9908237b491d298e41f06a27e2151e353b6f85a8d9d117f30"
+    },
+    {
+      "path": "experiments/public_cpr_baseline/baseline.py",
+      "sha256": "e1a47b03c8f17b2d21b56536f8e0f34cbca2d5012388d4a06f84e6bdb8470bc5"
+    },
+    {
+      "path": "data/public_cpr/weights/yolov8x-pose.pt",
+      "sha256": "7a9bf952c2fc1c07d4a1da00dbb4cfab5ed71f89cbe8824d51a8f7a61cee5825"
+    },
+    {
+      "path": "data/public_cpr/weights/k400_posec3d-041f49c6.pth",
+      "sha256": "041f49c67281a1630eaa2931a000d7dc3e7a5a3dd87ee8a1b7c2ca0da2e71ab8"
+    },
+    {
+      "path": "data/public_cpr/weights/noface_fast50_dcn_combined_256x192.pth",
+      "sha256": "679cb94eb30b0d587425037e36b1b9921c2648ed4ad079f2c4dd93163a7c27c9"
+    },
+    {
+      "path": "data/public_cpr/improvement-v2/combined-64.pt",
+      "sha256": "b5baf626d2e771cd444f87e61ed59267bd45b64822c7fffa2c728ef82fdc38d2"
+    },
+    {
+      "path": "data/public_cpr/improvement-v2/protocol.json",
+      "sha256": "f9c1580896058d8488a6093be3930fe6f6938ad25a7f7a38d1068af6cf1b72c0"
+    },
+    {
+      "path": "data/public_cpr/run/records.json",
+      "sha256": "8f092c8a61ddc3dc726d22447c042fc255e5ffa3a291c5fadf8afecac9709c38"
+    }
+  ],
+  "public_samples": {
+    "706883e2d4c07e23a811fe38ee5709a10625713e8717a35b21c4ecf58f57ccdf": {
+      "record_id": "SupC02/r00/ch0",
+      "video": "data/public_cpr/video-verification/SupC02-r00-ch0.mp4",
+      "role": "development_regression"
+    },
+    "60994d406f9fabaacc40cf0722225c84d63e6c11d13d8881cce1050eb267cb2b": {
+      "record_id": "SupC02/r01/ch0",
+      "video": "data/public_cpr/video-verification/SupC02-r01-ch0.mp4",
+      "role": "previously_exposed_regression"
+    },
+    "582b4c067be7a232862dc81bca0dacdeb549bb2ff415976598f56b79d1553a5e": {
+      "record_id": "CPR_Dataset_S0/C13_S0/r11/ch0",
+      "video": "data/public_cpr/video-verification/public-C13-r11-ch0.mp4",
+      "role": "previously_exposed_regression"
+    },
+    "c4be7368c54d119144c4f188d32502115bb0dcbbf7b02990ea4e757d127f5c1f": {
+      "record_id": "CPR_Dataset_S0/C13_S0/r12/ch0",
+      "video": "data/public_cpr/video-verification/public-C13-r12-ch0.mp4",
+      "role": "preselected_raw_test"
+    }
+  },
+  "raw_test_record": "CPR_Dataset_S0/C13_S0/r12/ch0",
+  "raw_test_video_sha256": "c4be7368c54d119144c4f188d32502115bb0dcbbf7b02990ea4e757d127f5c1f",
+  "disclosure": "Earlier skeleton test aggregate metrics and prior raw regression results were inspected. C13 r12 raw video was preselected by public availability and has not been run before this manifest. No subject-disjoint or independent external blind cohort claim.",
+  "runtime_release_approved": false
+}

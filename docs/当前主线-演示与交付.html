@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>当前主线 · 演示与交付</title>
+<style>
+:root{--ink:#172033;--muted:#617087;--line:#dbe4ef;--blue:#2563eb;--bg:#f5f8fc;--card:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1080px;margin:32px auto;padding:0 20px}.hero{background:linear-gradient(135deg,#102a56,#2563eb);color:#fff;padding:34px 38px;border-radius:22px;box-shadow:0 14px 34px #1d4ed822}.hero h1{margin:0 0 8px;font-size:30px}.hero p{margin:4px 0;color:#dbeafe}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 5px 16px #183b6410}.card h2,.card h3{margin:0 0 8px}.card p{margin:6px 0;color:var(--muted)}a{color:var(--blue);text-decoration:none;font-weight:650}.pill{display:inline-block;background:#dbeafe;color:#1d4ed8;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700}.ok{color:#0f766e}.warn{color:#9a3412}.section{margin-top:22px}.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.step{background:#eef4ff;border:1px solid #c9dcff;border-radius:10px;padding:7px 11px;font-size:13px}.arrow{color:#7c8da6}code{background:#edf2f7;padding:2px 5px;border-radius:5px}footer{color:var(--muted);font-size:13px;padding:20px 0 50px}@media(max-width:760px){main{margin:16px auto}.hero{padding:24px}.hero h1{font-size:24px}.grid{grid-template-columns:1fr}}
+.tips{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}.tip{padding:13px 15px;border-radius:12px;background:#f8fbff;border:1px solid #dbe8f5}.tip strong{display:block;margin-bottom:3px}.tip p{font-size:13px}.status{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:#0f766e}.status i{width:8px;height:8px;border-radius:50%;background:#2f9b71;box-shadow:0 0 0 3px #2f9b7120}@media(max-width:760px){.tips{grid-template-columns:1fr}}
+</style>
+</head>
+<body><main>
+<section class="hero"><span class="pill">mainline-delivery-v1</span><h1>单视角 CPR 训练错误分析与 Agent 辅助复盘系统</h1><p>Single-View CPR Training Error Analysis and Agent-Assisted Review System</p><p>当前主线：M1–M5 视觉级联 + 12 节点 LangGraph + 可选 DeepSeek 文字交互</p><p><span class="status"><i></i>默认 Guided review · 视频结果保存在当前工作区</span></p></section>
+<section class="grid">
+<article class="card"><h3>打开案例 01</h3><p>完整分析，查看手臂弯曲的证据、解释、摘要和参考片段。</p><a href="/demo/open/D01">进入完整复盘 →</a></article>
+<article class="card"><h3>打开案例 02</h3><p>先按重点检查，再扩大范围，展示复用与成本感知调度。</p><a href="/demo/open/D02">进入重点复核 →</a></article>
+<article class="card"><h3>打开案例 03</h3><p>新视频沿用下次关注点，但保持当前视频没有旧预测。</p><a href="/demo/open/D03">进入下一次练习 →</a></article>
+</section>
+<section class="card section"><h2>推荐演示顺序</h2><div class="tips"><div class="tip"><strong>1 · 先看完整复盘</strong><p>打开 D01，等待视觉分析完成，再查看错误卡片和对应证据。</p></div><div class="tip"><strong>2 · 追问一个结论</strong><p>点击 Explain 或输入问题，观察 Agent 复用已保存结果，不重复跑视觉分析。</p></div><div class="tip"><strong>3 · 展示范围扩展</strong><p>打开 D02，先复核重点类别，再扩大范围，查看工具调用和成本感知决策。</p></div><div class="tip"><strong>4 · 展示跨次记忆</strong><p>打开 D03，确认上一次的关注点被保留，但不会混入当前视频的预测结果。</p></div></div><p class="small-note">现场遇到异常时，优先查看页面错误说明；不要重复刷新正在运行的请求。</p></section>
+<section class="card section"><h2>本次已验证</h2><div class="flow"><span class="step">公开 CPR-Coach 视频</span><span class="arrow">→</span><span class="step">4 阶段真实视觉分析</span><span class="arrow">→</span><span class="step">证据约束解释 / 摘要</span><span class="arrow">→</span><span class="step">参考视频</span><span class="arrow">→</span><span class="step">跨次重点记忆</span></div><p class="ok">✓ 9 次真实视觉工具调用已完成；解释、摘要、参考查询均未重跑视觉模型。✓ 9 次 DeepSeek 文字请求已完成；预测结果保持不变。✓ 错误容器与过短视频边界检查通过。</p><p class="warn">数据集标签用于训练复盘研究样本，不构成专业 CPR 认证或医疗建议。</p></section>
+<section class="card section"><h2>现场体验提示</h2><div class="tips"><div class="tip"><strong>分析进行中</strong><p>页面会显示当前阶段和阶段序号：读取视频 → 检查动作 → 检查视觉细节 → 整理结果。进度会保存，可以等待或取消。</p></div><div class="tip"><strong>出现错误时</strong><p>先看页面给出的原因。预算不足可提高时间上限；来源失效可重新打开保存记录；视频无法解码时换用完整的 MP4、MOV 或 WebM。</p></div><div class="tip"><strong>导出与恢复</strong><p>有结果后点击 <b>Export review</b> 导出当前报告。刷新页面或重新打开案例会恢复视频、范围和已保存结果。</p></div><div class="tip"><strong>文字助手状态</strong><p>默认使用 Guided review 表单；只有启动 DeepSeek 模式时才会发送文字请求。视频、帧和视觉分数不会发送给语言模型。</p></div></div></section>
+<section class="grid section"><article class="card"><h3>版本与算法</h3><p>图版本 <code>cpr-review-12-v0.9-cascade</code></p><p>M5：<b>质量门控与特征依赖驱动的轻量化视觉级联</b></p><p>视觉配置 SHA：<code>4b98f9a0…ce4c8</code></p></article><article class="card"><h3>启动方式</h3><p>默认离线安全模式：<code>.\scripts\start.ps1</code></p><p>真实文字交互：<code>.\scripts\start.ps1 -EnableDeepSeek</code></p></article><article class="card"><h3>交付边界</h3><p>不新增人工标注，不训练新主干；只使用既有公开视频、冻结模型和已验证模块。</p><p><a href="/">打开复盘工作台 →</a></p></article></section>
+<section class="card section"><h2>Agent 决策如何可见</h2><div class="flow"><span class="step">读取当前会话与历史结果</span><span class="arrow">→</span><span class="step">解析用户目标与检查范围</span><span class="arrow">→</span><span class="step">复用或补充视觉工具</span><span class="arrow">→</span><span class="step">绑定证据后生成回复</span></div><p>工作台中的分析阶段、工具状态、复盘轨迹和证据卡片共同构成决策记录；文字助手只读取已保存的结构化结果，不接收视频、帧或视觉模型原始输入。</p></section>
+<footer>演示记录：<code>data/mainline-delivery-v1</code> · 运行前请确认模型环境与 GPU 锁可用。</footer>
+</main></body></html>

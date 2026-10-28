@@ -1,0 +1,78 @@
+多轮复盘上下文绑定 v1
+2026-10-22
+
+后续状态：第二、第三步见《证据解释与连续复盘-v1-实现与验收.txt》。当前图版本已升级为cpr-review-12-v0.6-grounded；本文保留第一步的设计与历史验收。旧版未结束请求需在原版本完成或取消后再切换。
+
+一、本轮实现什么
+每次请求绑定当前视频、来源报告和已确认范围，保存后不再悄悄换用另一份最新结果。
+保留12节点及M1–M5当前实现；本轮是系统主线能力，不算作四个组员的算法改进。
+没有新增数据采集、标注或模型训练。DeepSeek保持关闭。
+
+二、用户怎么用
+1. 启动 scripts/start_modules.ps1，打开 http://127.0.0.1:8004。
+2. Current review context显示下一次请求将使用的视频、报告和已确认范围。
+3. Continue this review scope承接这份报告的范围；修改类别后可显式发起新的关注点。
+4. 单项追问绑定当前报告。打开旧历史记录后，按旧记录承接，不受后续新报告的范围影响。
+5. 需要确认时，选择任务和类别，勾选正在使用的视频及报告，然后继续。
+6. 另一个视频需要先取消当前等待，再从会话列表打开；确认表单不暗中切换视频。
+7. Source used by this request显示已经完成的这一轮实际使用的来源，便于与下一轮上下文区分。
+
+三、指代规则
+explicit：用户明确指定类别；保留明确选择。
+previous_scope：只继承绑定报告中已确认、实际展示的范围。
+single_finding：只有该范围恰好包含一个类别才自动承接；多个类别时必须确认。
+ambiguous：不选一个看起来可能的类别或视频，进入确认表单。
+解释和摘要统一使用 existing_only，不能通过指代解析偷偷触发视觉推理。
+全局关注点偏好不会自动成为另一个视频的历史范围；仍由用户点击 Use saved focus应用。
+
+关闭LLM时，自由文字统一进入表单；本轮没有用关键词规则冒充语言理解。
+上述指代引用协议已经用模拟模型返回验证。真实DeepSeek的自然语言理解质量尚未评估。
+LLM以后的输入限于已确认类别、有限历史目标和是否有来源；不发送视频、路径、报告ID或哈希。
+
+四、数据及持久化
+Turn.context_snapshot：提交事务中一次性保存的视频、来源、历史目标和快照ID。
+Turn.resolved_goal / context_decision：确认后的目标，以及明确指定、继承或表单确认的依据。
+Run.review_context：本轮绑定与输出回执。Report.review_context：与报告一起原子提交的相同回执。
+业务数据仍在原SQLite中；LangGraph checkpoint仍使用独立SQLite。不新增MySQL或向量数据库。
+
+来源关系：当前Session → 当前Clip/Asset → 当前视频SHA256。
+报告关系：Source Report → 已完成Run → 原始Prediction/Execution → 已绑定结果文件。
+来源必须属于当前用户、同一会话、同一视频和同一模型版本，且是在本次请求前完成的报告。
+失败、取消、等待确认、没有识别结果的偏好或空摘要记录，不进入已确认复盘历史。
+绑定时和执行前检查来源；报告、视频或结果变化时拒绝使用，不换成另一个结果掩盖问题。
+快照ID用于一致性核对；确认表单还须匹配wait_id、interrupt_id及revision。
+
+五、节点与模块边界
+N01装载已保存快照，核对一致性；N02解析并约束目标；N03确认歧义与来源；N04复核确切来源。
+N05–N11继续使用原模块及报告链路；N12把上下文回执与结果原子持久化。
+实际状态机仍是12节点，没有新增Agent或改写M2–M5。
+新控制器位于 context_graph.py，复用原graph.py的节点注册、守卫和分析链路。
+控制器版本为 cpr-review-12-v0.5-context；ML配置和23项原固定依赖保持原哈希，因此已有视觉结果可复用。
+
+六、启动及兼容
+start_modules.ps1默认启用 CPR_CONTEXT_MODE=bound-v1，同时强制关闭DeepSeek。
+.env未修改；其他旧入口的默认context_mode仍为legacy。
+start_modules.ps1 -LegacyContext可启动旧上下文模式。切换前应完成或取消旧版本活动请求。
+启动检查遇到不兼容的活动请求会拒绝启动，不擅自把等待中的请求标成失败。
+相同版本的等待请求可在重启后继续，提交幂等键不会产生第二份上下文快照。
+
+七、验证入口
+.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe scripts/check_module_slots.py
+npm.cmd --prefix frontend run build
+
+真实HTTP复用验收：
+python scripts/context_binding_smoke.py --phase prepare --output-dir test-results/一个新目录
+在没有视觉进程运行时重启同版本服务，然后运行：
+python scripts/context_binding_smoke.py --phase resume --output-dir test-results/同一个目录
+
+浏览器验收：node scripts/context_binding_ui_smoke.cjs
+使用本机Edge/Playwright及已有真实公开视频结果，输出不覆盖已有验收文件。
+自动测试中的视觉和模型返回是明确的测试替身，不是识别精度或真实语言理解实验。
+真实系统验收复用原公开样片结果，不新增GPU推理或外部模型请求。
+
+本轮结果：157项自动测试通过，其中24项覆盖上下文绑定及边界；构建、格式及静态检查通过。
+真实HTTP复用公开样片已有结果，并在等待确认时重启服务，来源、快照和范围保持一致。
+1440/390像素浏览器验证旧报告承接、歧义确认、清空跨视频上下文及新浏览器恢复。
+移动端已验证原视频真实播放。四个模块维持基线实现，ML配置哈希保持不变。
+最终记录：test-results/context-binding-v1/tests-final-v2.xml、http-final/acceptance.json、ui-final/ui-acceptance.json。

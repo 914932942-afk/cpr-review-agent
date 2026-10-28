@@ -1,0 +1,8 @@
+{
+  "output": "C:\\Users\\gjj33\\Desktop\\998\\CPR+AGENT\\CODE\\data\\public_cpr\\run",
+  "dataset_assets": "C:\\Users\\gjj33\\Desktop\\998\\CPR+AGENT\\CODE\\data\\public_cpr\\assets",
+  "smoke_videos": "C:\\Users\\gjj33\\Desktop\\998\\CPR+AGENT\\CODE\\data\\public_cpr\\smoke-videos",
+  "report": "C:\\Users\\gjj33\\Desktop\\998\\CPR+AGENT\\CODE\\test-results\\public-head-validation",
+  "pose": "C:\\Users\\gjj33\\Desktop\\998\\CPR+AGENT\\CODE\\data\\public_cpr\\weights\\yolov8n-pose.pt",
+  "backbone": "C:\\Users\\gjj33\\Desktop\\998\\CPR+AGENT\\CODE\\data\\public_cpr\\weights\\k400_posec3d-041f49c6.pth"
+}

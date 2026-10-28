@@ -1,0 +1,24 @@
+{
+  "name": "cpr-review-workspace",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "format": "prettier --write src vite.config.ts index.html package.json tsconfig.json",
+    "format:check": "prettier --check src vite.config.ts index.html package.json tsconfig.json"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "prettier": "^3.9.10",
+    "typescript": "^5.7.0",
+    "vite": "^7.0.0"
+  }
+}

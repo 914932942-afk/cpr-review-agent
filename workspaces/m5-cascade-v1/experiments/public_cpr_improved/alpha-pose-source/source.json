@@ -1,0 +1,53 @@
+{
+  "repository": "https://github.com/MVIG-SJTU/AlphaPose",
+  "commit": "c60106d19afb443e964df6f06ed1842962f5f1f7",
+  "weight_sha256": "679cb94eb30b0d587425037e36b1b9921c2648ed4ad079f2c4dd93163a7c27c9",
+  "official_weight_file_id": "14Qn9gxm-EVzqFi7v25Y5TqKIvrFLy_BR",
+  "verified_files": [
+    {
+      "upstream": "alphapose/models/layers/SE_Resnet.py",
+      "local": "SE_Resnet.py",
+      "sha256": "d239a3ca0d925a40a7a82a6fe1b7533325e2598320087667b83f57c3df542a18"
+    },
+    {
+      "upstream": "alphapose/models/layers/DUC.py",
+      "local": "DUC.py",
+      "sha256": "64721bad314b6b1e7cce4faadbb21bfd67770d41d79955d15cc02bf4584a8a2a"
+    },
+    {
+      "upstream": "alphapose/models/fastpose.py",
+      "local": "fastpose.py",
+      "sha256": "a7c13b5c1ebd3e081082549fd97326fbfb85af4110888231719c859bdac3b159"
+    },
+    {
+      "upstream": "alphapose/utils/presets/simple_transform.py",
+      "local": "simple_transform.py",
+      "sha256": "5c434f81291ea36e63d6294fadd5b1ceb028e2d497f15046b8c5f4cc798f034c"
+    },
+    {
+      "upstream": "alphapose/utils/transforms.py",
+      "local": "transforms.py",
+      "sha256": "d60227eae29d06a01eb72625da95ebdb476c61552e9df501825e6e7ae7b79280"
+    },
+    {
+      "upstream": "alphapose/models/layers/dcn/deform_conv.py",
+      "local": "deform_conv.py",
+      "sha256": "2715a873059984bc9285c3a8705dc8071a0cac0063e93daced13d33eecfc42be"
+    },
+    {
+      "upstream": "alphapose/models/layers/SE_module.py",
+      "local": "SE_module.py",
+      "sha256": "c99ad848a0ffa4a625a6fb5ae6ed3e662dd5231c6c082d40a5ee0a25c90d88be"
+    },
+    {
+      "upstream": "alphapose/utils/bbox.py",
+      "local": "bbox.py",
+      "sha256": "190436445493f8ff08db86f64dca9c8fbc2198a11827a8a60d5d1e947c08bdf3"
+    },
+    {
+      "upstream": "LICENSE",
+      "local": "LICENSE",
+      "sha256": "08fded547a858988650c9468da90e76f0025065ea3e69fd0266e32e87f3d95d6"
+    }
+  ]
+}

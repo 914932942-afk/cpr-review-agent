@@ -1,0 +1,49 @@
+DeepSeek真实联调 v1
+2026-10-22
+
+当前可用入口
+http://127.0.0.1:8006
+启动：.\scripts\start_deepseek.ps1 -EnableDeepSeek
+Key继续从CODE根目录.env读取，不需要填写到网页。该入口使用独立data/deepseek-live-v1/runtime，不改变8004工作区或8005冻结演示环境。
+原.env仍为disabled；8004/8005仍关闭外部模型。8006的启动参数只在其服务进程中启用DeepSeek。
+
+真实调用结果
+官方/models接口HTTP 200，配置的deepseek-flash在可用列表中。
+初次真实目标解析成功，约1078毫秒。
+真实HTTP状态机验证九类场景：中文明确目标、单项指代、上一组范围、多类别歧义、另一视频指代、不支持的深度/BPM测量请求、要求篡改结论的指令、英文摘要，以及显式focus偏好与当前来源冲突。
+九类场景全部通过；歧义等请求进入确认流程；人工确认后正确沿用报告与所选范围。
+重复提交复用同一请求；解释、摘要和刷新均没有重复运行视觉模型。
+真实浏览器提交中文追问，N02完成目标解析，N11返回有效组织计划，最终解释绑定原识别结果；刷新和390px宽度检查通过。
+本次共19次真实chat/completions请求：初次探测1次、HTTP联调16次、浏览器2次；另有一次/models查询。未进行训练或人工动作标注。
+
+大模型实际职责
+N02：解析文字目标及指代；不能指定任意文件、视频或工具。
+N11：组织已核验类别顺序和开头侧重点。类别集合严格校验；事实句、原始分数、模型状态和限制仍由服务端生成。
+没有上传视频、图像帧、文件路径、报告ID、视频SHA或原始识别分数到DeepSeek。目标解析只发送用户文字、有限目标上下文和标签字典；组织请求只发送意图、类别ID及标记状态。
+原始CV输出保持不变；不把分数作为医学概率，不提供错误时间点、物理深度或测量BPM。
+M4仍是固定分析/停止基线；本次真实LLM接通不等于完成M4算法。
+
+怎么体验
+1. 打开8006，从Saved session选择demo-training.mp4。
+2. 在历史中打开Finding evidence或Review summary；建议先选只包含Bent arms的报告。
+3. 展开Describe a review goal，输入“继续解释刚才那个问题的已有结果，不要重新分析视频。”，点击Submit request。
+4. 查看结果范围、已验证来源和“DeepSeek organised the categories”说明。
+5. 如要体验歧义确认，打开包含两项类别的旧报告后输入“解释一下这个问题”。确认表单会要求明确任务与来源。
+后续点击文字解释或摘要可能产生真实API费用；普通查看、刷新、导出不会请求模型。
+
+复现与验收文件
+真实用例：.\.venv\Scripts\python.exe scripts/deepseek_live_smoke.py --allow-live --output-dir test-results/deepseek-repeat-01
+此脚本会再产生一批真实请求；不作为常规自动测试运行。
+test-results/deepseek-live-v1/http/acceptance.json：九类真实HTTP场景与调用回执。
+test-results/deepseek-live-v1/ui/acceptance.json：真实浏览器文字追问。
+data/deepseek-live-v1/acceptance.json：最终验收与来源核对。
+
+验证边界
+这是小规模真实接口及业务场景联调，不是所有自然语言表达的准确率保证。
+超时、限流、格式错误和熔断仍由既有模拟故障测试覆盖，未故意在真实账户制造故障。
+当前调用代码与模型版本可运行，不代表未来服务配置或在线返回永远不变。
+真实Key不进入日志、前端、验收记录和归档；冻结演示归档保持原样。
+
+核对的官方接口文档
+https://api-docs.deepseek.com/
+https://api-docs.deepseek.com/api/create-chat-completion/

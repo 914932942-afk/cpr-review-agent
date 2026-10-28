@@ -1,0 +1,21 @@
+CPR Review 演示案例 v1
+
+打开 docs/演示案例-v1.html，按卡片操作。案例清单在 data/demo-cases-v1/cases.json。
+启动：.\scripts\start_product_demo.ps1，访问 http://127.0.0.1:8007；回看无需大模型。
+
+C01 弯臂：video.mp4，Review history中的完整Video review，提示#4。
+C02 手臂倾斜：follow-up-practice.mp4，最新Video review，11类范围内提示#5。
+C03 正常标签：case-03-normal-labelled.mp4，11类均未标记；不是动作合格认证。
+C04 损坏容器：data/demo-cases-v1/controls/case-04-invalid-container.mp4，上传返回415，旧练习不切换。
+C05 三帧视频：case-05-too-short-3frames.mp4，已有失败记录可回看；无预测、无分类结论。
+C06 参考对照：video.mp4，历史中的Reference comparison，切换正常标签与弯臂示例，查看来源。
+C07 跨次目标：next-practice-focus.mp4，保存了弯臂起始范围；打开旧摘要，但新视频仍没有分析结果。
+
+默认演示已完成记录，约5–7分钟；真正现场重跑首次分析另留2–3分钟及余量。历史回看不等于新推理。
+本轮新增1次正常样片完整分析、1次短视频输入探测；倾斜案例只扩展已有结果的显示范围，0次新视觉计算。
+未新增模型请求、数据采集、人工标签或训练；应用代码、M1–M5及模型版本未改。
+这是已知样片的工程演示，不是未知场景准确率实验；三帧与损坏文件是边界控制，不带CPR标签。
+案例准备脚本会保存运行ID与幂等键，禁止覆盖已验收清单，避免重复计算。
+
+演示前只读核验：.\.venv\Scripts\python.exe scripts/check_demo_case_readiness.py
+核验7个案例、公开素材哈希、来源证据及尚未分析的目标记忆场景，不上传、不触发推理、不调用供应商。

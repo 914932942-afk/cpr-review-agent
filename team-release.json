@@ -1,0 +1,10 @@
+{
+  "schema": "cpr-team-release-v1",
+  "repository": "914932942-afk/cpr-review-agent",
+  "tag": "team-demo-v1",
+  "asset_name": "cpr-team-assets-v1.zip",
+  "release_url": "https://github.com/914932942-afk/cpr-review-agent/releases/tag/team-demo-v1",
+  "sha256": "6928dc4adb35895bd2f257ec96b548d86f9ae3088b95132bdc8d58d47f0b3db9",
+  "bytes": 885994483,
+  "asset_api_url": ""
+}

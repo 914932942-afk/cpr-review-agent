@@ -1,0 +1,156 @@
+.practice-continuity {
+  padding: 24px;
+}
+.continuity-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #52734f;
+}
+.continuity-heading h2 {
+  margin: 5px 0 0;
+  font-size: 19px;
+  color: #254a51;
+}
+.practice-continuity > p {
+  color: #64766b;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.practice-continuity > label {
+  display: block;
+  font-size: 12px;
+  margin: 16px 0 7px;
+  color: #5c6f60;
+}
+.practice-continuity > select {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #d9e4d5;
+  border-radius: 8px;
+  padding: 10px;
+  color: #335c4f;
+  background: #f8faf6;
+  font: inherit;
+  font-size: 12px;
+}
+.continuity-scope span {
+  display: block;
+  font-size: 11px;
+  margin-top: 4px;
+}
+.continuity-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.continuity-saved {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px;
+  margin-top: 14px;
+  border-radius: 8px;
+  background: #edf4e8;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #4b6944;
+}
+.continuity-saved > svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.continuity-saved small {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  font-weight: normal;
+}
+.practice-continuity .continuity-limit {
+  border-top: 1px solid #e5eadf;
+  padding-top: 13px;
+  margin: 17px 0 0;
+  font-size: 11px;
+}
+.continuity-unavailable {
+  font-size: 12px;
+  line-height: 1.8;
+  padding: 10px;
+  color: #6a755c;
+}
+.previous-recap-dialog {
+  width: min(680px, calc(100vw - 32px));
+  max-height: 85vh;
+  overflow-y: auto;
+  border: 1px solid #dce6da;
+  border-radius: 18px;
+  padding: 26px;
+  color: #31575a;
+  background: #fff;
+  box-shadow: 0 20px 80px #18342a33;
+}
+.previous-recap-dialog::backdrop {
+  background: #162e285c;
+}
+.previous-recap-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+}
+.previous-recap-header h2 {
+  margin: 7px 0 0;
+  font-size: 22px;
+}
+.previous-video-name {
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  margin: 20px 0 12px;
+}
+.previous-recap-dialog > p {
+  font-size: 13px;
+  line-height: 1.8;
+}
+.previous-recap-notice {
+  background: #f7f4e9;
+  border-radius: 9px;
+  padding: 12px;
+  color: #766335;
+}
+.previous-recap-entry {
+  border-top: 1px solid #e6ece2;
+  padding: 12px 0;
+}
+.previous-recap-entry h3 {
+  margin: 0 0 7px;
+  font-size: 15px;
+}
+.previous-recap-entry p {
+  margin: 5px 0;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.previous-recap-entry > span {
+  font-size: 11px;
+  line-height: 1.8;
+  color: #748069;
+}
+.previous-recap-dialog > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  text-decoration: none;
+}
+@media (max-width: 650px) {
+  .practice-continuity {
+    padding: 19px;
+  }
+  .previous-recap-dialog {
+    padding: 20px;
+  }
+  .continuity-actions .quiet {
+    padding-left: 0;
+  }
+}

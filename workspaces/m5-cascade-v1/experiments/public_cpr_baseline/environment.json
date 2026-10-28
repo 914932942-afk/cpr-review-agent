@@ -1,0 +1,19 @@
+{
+  "python": "3.11.15",
+  "os": "Windows-10-10.0.22000-SP0",
+  "gpu": "NVIDIA GeForce RTX 3070 Laptop GPU",
+  "gpu_total_bytes": 8589410304,
+  "ram_total_bytes": 34115739648,
+  "packages": {
+    "torch": "2.11.0+cu126",
+    "torchvision": "0.26.0+cu126",
+    "numpy": "2.4.4",
+    "mmengine": "0.10.7",
+    "mmcv-lite": "2.1.0",
+    "mmaction2": "1.2.0",
+    "ultralytics": "8.3.0",
+    "opencv-python": "4.11.0.86",
+    "scikit-learn": "1.8.0",
+    "psutil": "7.2.2"
+  }
+}

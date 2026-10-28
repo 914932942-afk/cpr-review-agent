@@ -1,0 +1,74 @@
+模块插槽 v1 · 当前基线与组员接入边界
+
+1. 当前状态
+M1及其效率优化保留。M2–M5已经是运行链路中的可替换组件，默认使用基线；没有实现或宣称完成四个新算法。
+12节点与四个真实视觉工具保留。DeepSeek关闭，不新增训练、下载、数据采集或人工标注。
+
+2. 启动与检查
+在CODE目录运行：scripts/start_modules.ps1
+页面：http://127.0.0.1:8004
+独立运行数据：data/module-slots-v1/runtime
+只检查注册、源文件绑定及无证据/STOP契约：
+.venv\Scripts\python.exe scripts/check_module_slots.py
+检查不等于算法效果验收，也不会执行视觉模型或大模型。
+JSON Schema：data/module-slots-v1/schemas
+
+3. 模块边界
+M2 / Wenbo Zhang：FusionInput → MLResult。输入两路Readout、质量指标及相同视频/人体/版本绑定。默认baseline-v15，保留冻结融合。
+M3 / Wenxin Yan：CalibrationInput → Assessment。只读取已执行模型结果和已获得质量指标；默认baseline-uncalibrated-v1，不产生校准概率。
+M4 / Mingmin Guo：PolicyObservation → Decision。读取目标、评估、已执行/失败动作、合法动作、已就绪profile与剩余预算；默认baseline-fixed-v1。
+M5 / Xiaoyu Li：RGBInput → MLResult。输入原视频、共享人体轨迹、采样profile、帧数与FPS；默认baseline-rgb-v15，执行原16帧采样与RGB/几何上下文识别。
+M2/M5在ML进程执行；M3/M4在Web控制进程执行，参数初始化应轻量，不能在Web导入或加载GPU模型。
+
+4. 公共契约
+contracts.py统一Binding、ArtifactRef、Prediction、QualityIndicators、Assessment和Decision。
+Binding包括clip_id、原视频SHA256、原模型包SHA256、pipeline SHA256及适用时的人体来源SHA256。跨片段、视频、版本或人体不可混合。
+错误类别固定为1/2/3/4/5/6/7/8/9/11/13；RGB当前仅支持1/2/5/7/9。
+Prediction必须逐项提供支持类别分数和明确的flagged集合。缺少某类不能补0分并表示没有错误。
+分数语义明确区分uncalibrated_score、calibrated_probability、logit。当前视觉导出profile接受有界uncalibrated_score，其他布局需由主系统另行适配验收。
+Assessment统一使用model_flagged、not_flagged、uncertain、not_evaluated。未评估类别不能有校准概率；未校准结果不能把原始分数冒充校准概率。
+报告中的classification_claims始终保留原始CV判定；module_assessment单独保存M3评估。页面分别显示，uncertain不被变成动作正确。
+质量字段缺失保留None，不伪造为已测得的零；质量只能来自已经执行的步骤。
+M5审计必须包含原视频的有序唯一采样索引及请求帧数。原帧索引/FPS不用于伪造实际BPM或错误发生时间。
+
+5. ML返回结构
+MLResult包含Prediction、NumPy数组和审计字典。文件写入、哈希、计时和业务提交由主系统负责。
+当前兼容数组：scores、thresholds、eligible；RGB还提供label_ids、hand_override、normal_veto_threshold及RGB/手形特征；融合提供predictions与predicted_count。
+scores保留原可用布局：骨架含辅助正常分数，导出仅11类错误；RGB5类；最终导出11类。掩码必须是bool，数组必须有限且不能是object。
+模块的字典分数、数组分数、阈值和标记集合必须一致；不允许返回成功却产出空结果或错误绑定。
+原模型包保持145项哈希不变；组员新参数放在独立路径并注册required_files，不覆盖原权重。
+
+6. 组员注册与切换
+算法放在各自文件中，实现m2_fusion.py/m3_calibration.py/m4_scheduling.py/m5_rgb.py所定义的接口。
+在backend/cpr_agent/modules/members.py的register_members中显式注册ModuleSpec。
+ModuleSpec指定module_id、唯一implementation_id、factory、kind及required_files；契约版本必须为cpr-modules-v1。
+M2/M5的factory可以延迟导入ML实现；在创建对象或predict/fuse时加载模型。参数文件必须列入required_files。
+未注册ID、契约不符、未锁定或改变的源文件将被拒绝；不会偷偷替换成基线。
+生成新的profile示例（member-v1仅是占位名称，未注册时应报错）：
+.venv\Scripts\python.exe scripts/build_module_profile.py --base-profile data/module-slots-v1/pipeline-manifest.json --m2 member-v1 --output data/team-profiles/m2-v1.json
+未指定的M3/M4/M5选择继承base-profile，避免切换一个模块时意外重置其他模块。
+新profile包含配置、契约、算法代码和参数哈希；不同profile缓存不混用。已有profile不覆盖、不自动热加载。
+主系统确认验收后，将CPR_BRANCH_MANIFEST指向新profile，使用独立CPR_DATA_DIR并重启。不要直接修改正在演示的代码目录和profile。
+
+7. 调度能力目录
+当前只开放经过验证的完整分析路径full-v15，以及STOP。run_skeleton/run_rgb/run_fusion作为契约动作预留，不表示它们现在能独立发布最终结果。
+M4必须从输入available_actions和available_profile_ids中选择；不能跳过依赖、调用未注册工具或假装存在第二条复核路径。
+后续M5预算profile、M2缺失分支处理和M3对应校准通过后，由主系统扩充可用路径，再由M4选择。此次不实现收益估计或智能调度算法。
+
+8. 责任与失败处理
+组员模块负责算法、参数和算法测试，不修改API、数据库、状态机控制、重试/取消或最终发布逻辑，不接收Store或Settings对象。
+未交付时显式选择基线。成员实现运行失败或输出违约时停止并报告错误，不用基线结果冒充成员结果。
+接口测试使用明确标记的测试替身；真实视频验收使用真实四工具。注册成功、接口通过与算法改进有效是三种不同的验收。
+
+9. 冻结与回退
+改造前最新M1版本：releases/stable-m1-20261022-v1
+其中snapshot/和application-and-demo.zip保持不变，含SQLite备份与演示素材；RESTORE.txt说明恢复到原CODE目录的方法。
+原scripts/start_m1_fast.ps1及8003入口仍可用于基线对照。模型与环境按清单引用，不打包Key或重复复制大数据。
+
+10. 本次验收
+129项自动化测试通过，覆盖原功能、接口边界、注册替换、无证据状态、非法动作拦截、版本绑定和配置继承。
+26段已有视频特征经注册M2融合适配器重放，与原融合分数完全一致，最终Macro-F1保持0.8667。
+最终版本执行一段公开原视频的实际HTTP/四工具链路，输出[4]，与原M1参考的最大分数差约1.11e-16；这验证工程兼容，不是新增盲测。
+1440/390像素宽度页面、重启后的证据/播放/导出/摘要复用通过。摘要复用不新增视觉调用，真实大模型调用0。
+前端构建与格式检查通过。原145项模型/推理依赖及M1计算源文件保持不变；稳定快照285个文件哈希和真实解压导入路径再次核验通过。
+完整记录：data/module-slots-v1/acceptance.json、test-results/module-slots-v1/。
