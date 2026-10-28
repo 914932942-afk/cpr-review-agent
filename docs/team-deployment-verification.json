@@ -1,0 +1,95 @@
+{
+  "schema": "team-deployment-verification-v1",
+  "fresh_checkout": true,
+  "web_dependencies_installed_in_new_venv": true,
+  "resources_extracted_and_checksums_verified": true,
+  "frozen_sources_and_assets_checked": 243,
+  "original_gpu_environment_reused_for_inference": true,
+  "new_gpu_environment_installation_not_yet_executed": false,
+  "api_key_configured": false,
+  "routes": [
+    {
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "path": "/api/capabilities",
+      "status": 200
+    },
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/demo",
+      "status": 200
+    },
+    {
+      "path": "/demo/open/D01",
+      "status": 200
+    },
+    {
+      "path": "/demo/open/D02",
+      "status": 200
+    },
+    {
+      "path": "/demo/open/D03",
+      "status": 200
+    }
+  ],
+  "saved_evidence_revalidated": 2,
+  "new_video": {
+    "passed": true,
+    "fresh_clone": true,
+    "fresh_web_environment": true,
+    "ml_environment_reused": true,
+    "api_key_configured": false,
+    "new_public_video": true,
+    "status": "completed",
+    "seconds": 99.62,
+    "tools": [
+      "pose.extract",
+      "skeleton.predict",
+      "rgb.predict",
+      "fusion.predict"
+    ],
+    "claims": 11,
+    "evidence_available": true,
+    "run_id": "2a10383c-40e2-457c-905a-8e83bc6d5a21",
+    "llm_calls": 0
+  },
+  "resource_pack_bytes": 885994483,
+  "resource_secret_matches": 0,
+  "source_secret_matches": 0,
+  "fresh_gpu_environment_installed": true,
+  "new_gpu_environment_video": {
+    "passed": true,
+    "fresh_clone": true,
+    "fresh_web_environment": true,
+    "fresh_gpu_environment": true,
+    "ml_environment_reused": false,
+    "api_key_configured": false,
+    "status": "completed",
+    "seconds": 99.03,
+    "tools": [
+      "pose.extract",
+      "skeleton.predict",
+      "rgb.predict",
+      "fusion.predict"
+    ],
+    "claims": 11,
+    "evidence_available": true,
+    "same_classifications_as_existing_environment": true,
+    "max_score_difference": 0.0,
+    "run_id": "f655d85f-835d-4560-baa5-b3803ee1e713",
+    "llm_calls": 0
+  },
+  "private_release_full_download": {
+    "passed": true,
+    "bytes": 885994483,
+    "seconds": 100.69,
+    "source": "authenticated_private_github_release",
+    "secret_printed": false
+  },
+  "gpu_dependency_fix": "Pinned pydantic for the ML subprocess contract validation"
+}

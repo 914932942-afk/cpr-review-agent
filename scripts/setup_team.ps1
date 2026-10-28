@@ -1,6 +1,7 @@
 param(
     [string]$MLPython = '',
     [string]$AssetsZip = '',
+    [string]$Python = '',
     [switch]$InstallGPU
 )
 $ErrorActionPreference = 'Stop'
@@ -8,7 +9,8 @@ $taskRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..')).Path
 Set-Location -LiteralPath $taskRoot
 $taskWeb = Join-Path $taskRoot '.venv\Scripts\python.exe'
 if (-not (Test-Path -LiteralPath $taskWeb)) {
-    & py -3.11 -m venv .venv
+    if ($Python) { & $Python -m venv .venv }
+    else { & py -3.11 -m venv .venv }
     if ($LASTEXITCODE -ne 0) { throw 'Python 3.11 is required.' }
 }
 & $taskWeb -m pip install -r requirements.lock
@@ -19,7 +21,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Resource installation failed. See README for m
 if ($InstallGPU) {
     $MLPython = Join-Path $taskRoot '.venv-ml\Scripts\python.exe'
     if (-not (Test-Path -LiteralPath $MLPython)) {
-        & py -3.11 -m venv .venv-ml
+        if ($Python) { & $Python -m venv .venv-ml }
+        else { & py -3.11 -m venv .venv-ml }
         if ($LASTEXITCODE -ne 0) { throw 'ML environment creation failed.' }
     }
     & $MLPython -m pip install 'torch==2.11.0' 'torchvision==0.26.0' --index-url https://download.pytorch.org/whl/cu126
