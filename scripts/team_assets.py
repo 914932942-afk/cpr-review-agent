@@ -43,15 +43,12 @@ def download(meta: dict) -> Path:
     target.parent.mkdir(exist_ok=True)
     if target.is_file() and sha(target) == meta["sha256"]:
         return target
-    token = github_token()
-    if not token:
-        raise RuntimeError(
-            "Private Release download requires your own GitHub Git credentials. "
-            "Alternatively download the ZIP in your browser from " + meta["release_url"]
-            + " and rerun setup_team.ps1 -AssetsZip <ZIP path>."
-        )
-    headers = {"Accept": "application/octet-stream", "Authorization": "Bearer " + token,
-               "User-Agent": "CPR-Team-Setup"}
+    headers = {"Accept": "application/octet-stream", "User-Agent": "CPR-Team-Setup"}
+    # Public resources need neither a GitHub account nor local Git credentials.
+    if not meta.get("public", True):
+        token = github_token()
+        if token:
+            headers["Authorization"] = "Bearer " + token
     api = meta["asset_api_url"]
     if not api.startswith("https://api.github.com/repos/914932942-afk/cpr-review-agent/releases/assets/"):
         raise RuntimeError("Unexpected asset API destination")

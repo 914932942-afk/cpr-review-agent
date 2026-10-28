@@ -9,7 +9,7 @@
 ### 1. 前置环境和克隆
 
 - Python **3.11**，`py -3.11 --version` 可用；Git for Windows。
-- 本仓库为私有仓库，先由所有者邀请为 collaborator，接受邀请后用自己的 GitHub 账号登录 Git Credential Manager。
+- 仓库及配套 Release 均公开，查看、克隆和下载无需登录 GitHub，也不需要邀请。
 - 完整新视频分析需要 **NVIDIA CUDA GPU**。开发机已验证 Windows、RTX 3070 Ti、16 GB RAM；首次 CUDA PyTorch 下载为数 GB，请预留至少 15 GB 磁盘。
 - 已提供冻结的前端构建。首次运行 **不需要 Node.js，请勿执行旧 bootstrap.ps1 重建前端**。
 
@@ -32,7 +32,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\setup_team.ps1 -In
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\setup_team.ps1 -MLPython 'C:\你的环境\python.exe'
 ```
 
-**下载遇到 403/404 或缺少 Git 凭据：** 确认已接受仓库邀请。也可登录 GitHub，打开 [Release 资源页](https://github.com/914932942-afk/cpr-review-agent/releases/tag/team-demo-v1)，下载 `cpr-team-assets-v1.zip`，再运行（不用手动解压）：
+**自动下载失败或受到 GitHub API 限流：** 打开 [Release 资源页](https://github.com/914932942-afk/cpr-review-agent/releases/tag/team-demo-v1)，直接下载 `cpr-team-assets-v1.zip`，再运行（不用手动解压）：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\setup_team.ps1 -InstallGPU -AssetsZip 'C:\Downloads\cpr-team-assets-v1.zip'
@@ -128,7 +128,7 @@ data/mainline-delivery-v1/                演示目录与验收（Release）
 docs/                                    工程、算法与交接说明
 ```
 
-模型及演示资源约 0.9 GB，通过 Release 分发，避免大文件进入普通 Git 历史。源码、构建和资源由 SHA256 清单绑定；私有 Release 与仓库使用相同访问权限。
+模型及演示资源约 0.9 GB，通过公开 Release 分发，避免大文件进入普通 Git 历史。源码、构建和资源由 SHA256 清单绑定，可匿名下载。
 
 ## 安装检查
 
